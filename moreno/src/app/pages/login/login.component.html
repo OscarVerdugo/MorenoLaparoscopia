@@ -1,0 +1,53 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <a class="navbar-brand" href="#">Moreno Laparoscopio</a>
+  </nav>
+  <div class="background">
+      <div class="box">
+        <h2>Inicia sesión</h2>
+        <div *ngIf="message != null" class="alert alert-danger">
+          {{ message }}
+        </div>
+
+        <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
+          <div class="form-group">
+            <label for="cLogin">Usuario</label>
+            <input
+              type="text"
+              formControlName="cLogin"
+              class="form-control"
+              [ngClass]="{ 'is-invalid': submitted && f.cLogin.errors }"
+            />
+            <div *ngIf="submitted && f.cLogin.errors" class="invalid-feedback">
+              <div *ngIf="f.cLogin.errors.required">Usuario requerido</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="cPassword">Contraseña</label>
+            <input
+              type="password"
+              formControlName="cPassword"
+              class="form-control"
+              [ngClass]="{ 'is-invalid': submitted && f.cPassword.errors }"
+            />
+            <div
+              *ngIf="submitted && f.cPassword.errors"
+              class="invalid-feedback"
+            >
+              <div *ngIf="f.cPassword.errors.required">
+                Contrase&ntilde;a requerida
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <button [disabled]="loading" class="btn btn-primary">
+              Iniciar
+            </button>
+            <img
+              *ngIf="loading"
+              class="pl-3"
+              src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA=="
+            />
+          </div>
+        </form>
+      </div>
+  </div>

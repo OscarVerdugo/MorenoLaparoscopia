@@ -1,0 +1,78 @@
+<div class="table-wrapper">
+    <div class="table-title">
+      <div class="row">
+        <div class="col-sm-5">
+          <h2><b>Rentas</b></h2>
+        </div>
+        <!-- <div class="col-sm-7">
+          <a href="#" class="btn btn-primary" (click)="edit({},0,content,$event)"><i class="fa fa-plus-circle"></i> <span>Nuevo
+              {{model.tags.singular}}</span></a>
+        </div> -->
+      </div>
+    </div>
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Fecha</th>
+          <th>Empleado</th>
+          <th>Cliente</th>
+          <th>SubTotal</th>
+          <th>IVA</th>
+          <th>Total</th>
+          <th>Acción</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let v of lstCurrent">
+          <td>{{v.nIdVenta}}</td>
+          <td>{{v.dFecha | date: 'dd/MM/yyyy'}}</td>
+          <td>{{v.cNombreEmpleado}}</td>
+          <td>{{v.cNombreCliente}}</td>
+          <td>{{v.nSubTotal | currency}}</td>
+          <td>{{v.nIva | currency}}</td>
+          <td>{{v.nTotal | currency}}</td>
+          <td>
+            <a href="#" class="settings" (click)="edit(v.nIdVenta,$event)"><i class="fa fa-pencil-alt"></i></a>
+            <a href="#" class="delete" (click)="delete(v.nIdVenta,$event)"><i class="fa fa-times-circle"></i></a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="clearfix">
+      <div class="hint-text">Mostrando <b>{{pag.nReg}}</b> de <b>{{lstVentas.length}}</b> rentas</div>
+      <ul class="pagination">
+        <li class="page-item"><a href="#" class="page-link" (click)="changePage(pag.nCurrentPage-1,$event)">Anterior</a>
+        </li>
+        <li [className]="'page-item'" [id]="'page'+(i+1)" *ngFor="let pag of pag.lstNumbers;let i = index"
+          [attr.data-index]="i">
+          <a href="#" class="page-link" (click)="changePage(i+1,$event)">{{i+1}}</a>
+        </li>
+        <li class="page-item"><a href="#" class="page-link" (click)="changePage(pag.nCurrentPage+1,$event)">Siguiente</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  
+  <ng-template #del let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-title">Eliminar renta</h4>
+      <button type="button" class="close" aria-label="Close button" aria-describedby="modal-title"
+        (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p><strong>Está seguro de eliminar esta <span class="text-primary">Renta</span></strong>?</p>
+      <p>Todos los datos seran eliminados permanentemente.
+        <br>
+        <span class="text-danger">Esta acción no podra revertirse.</span>
+      </p>
+    </div>
+    <div class="modal-footer">
+      <button type="button" ngbAutofocus class="btn btn-outline-secondary"
+        (click)="modal.dismiss(false)">Cancelar</button>
+      <button type="button" class="btn btn-danger" (click)="modal.close(true)">Ok</button>
+    </div>
+  </ng-template>
+  

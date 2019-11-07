@@ -1,0 +1,224 @@
+<div class="container-fluid">
+    <div class="row">
+      <div class="col-6">
+        <label>Cliente</label>
+        <ng-select [items]="lstClientes" bindLabel="cNombre" bindValue="nIdCliente" 
+          [(ngModel)]="venta.nIdCliente" (change)="changeCustomer($event)">
+        </ng-select>
+        <small class="form-text d-none" id="cliente">Campo Invalido</small>
+      </div>
+      <div class="col-6">
+        <label>Empleado</label>
+        <ng-select [items]="lstEmpleados" bindLabel="cNombre" bindValue="nIdEmpleado" placeholder="Selecciona un empleado"
+          [(ngModel)]="venta.nIdEmpleado" (change)="changeEmployee($event)">
+        </ng-select>
+        <small class="form-text d-none" id="empleado">Campo Invalido</small>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-4">
+        <label for="fecha">Fecha</label>
+        <input type="text" class="form-control" id="fecha" placeholder="Fecha" [(ngModel)]="venta.dFecha" readonly>
+      </div>
+      <div class="form-group col-4">
+        <label for="SubTotal">SubTotal</label>
+        <div class="form-control" id="SubTotal">
+          {{venta.nSubTotal | currency}}
+        </div>
+      </div>
+      <div class="form-group col-4">
+        <label for="iva">IVA</label>
+        <div class="form-control" id="iva">
+          {{venta.nIva | currency}}
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-4">
+        <label for="total">Total</label>
+        <div class="form-control" id="total">
+          {{venta.nTotal | currency}}
+        </div>
+      </div>
+    </div>
+    <button class="btn btn-success btn-lg" (click)="save()">Guardar Renta</button>
+  </div>
+  <hr>
+  
+  <div class="table-wrapper">
+    <div class="table-title">
+      <div class="row">
+        <div class="col-5">
+          <h2><b>Productos</b></h2>
+        </div>
+        <div class="col-7">
+          <a href="#" class="btn btn-primary" (click)="addDetail($event)"><i class="fa fa-plus-circle"></i> <span>Agregar
+              Producto</span></a>
+        </div>
+      </div>
+    </div>
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Articulo</th>
+          <th>Precio</th>
+          <th>Cantidad</th>
+          <th>Importe</th>
+          <th>Acción</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let p of lstDetalles">
+          <td style="width:3%;">{{p.nIdProducto}}</td>
+          <td style="width:40%;">
+            <ng-select [items]="lstProductos" bindLabel="cDescripcion" bindValue="nIdProducto"
+              placeholder="Selecciona un producto" (change)="changeDetail($event,p.index)" [(ngModel)]="p.nIdProducto">
+            </ng-select>
+            <small class="form-text d-none" [id]="'producto'+p.index">Campo Invalido</small>
+          </td>
+          <td style="width:15%;">{{p.nPrecio | currency}}</td>
+          <td style="width:20%;">
+            <input type="number" class="form-control" [id]="'cantidad'+p.index" [(ngModel)]="p.nCantidad"
+              (change)="calcTot()">
+            <div class="invalid-feedback d-none" [id]="'cantidadlabel'+p.index">
+              Cantidad Invalida
+            </div>
+          </td>
+          <td>{{p.nImporte | currency}}</td>
+          <td>
+            <!-- <a href="#" class="settings" (click)="edit(p,p.nIdProducto,content,$event)"><i
+                class="fa fa-pencil-alt"></i></a> -->
+            <a href="#" class="delete"><i class="fa fa-times-circle" (click)="deleteDetail(p.index,$event)"></i></a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    
+  </div>
+  
+  <ng-template #error let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-title">Renta Incompleta</h4>
+      <button type="button" class="close" aria-label="Close button" aria-describedby="modal-title"
+        (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p><strong>No es posible guardar esta <span class="text-primary">Renta</span></strong></p>
+      <p>Porque no se tienen productos asignados a ella.
+        <br>
+        <span class="text-danger">Es necesario completar la renta correctamente.</span>
+      </p>
+    </div>
+    <div class="modal-footer">
+      <button type="button" ngbAutofocus class="btn btn-danger" (click)="modal.close(true)">Ok</button>
+    </div>
+  </ng-template>
+  
+  <ng-template #msg let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title">Mensaje</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <h2 class="alert alert-info">{{textMsg}}</h2>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-light" (click)="modal.close('Close click')">Close</button>
+    </div>
+  </ng-template>
+  
+  <!-- <div id="contentToConvert">
+    <div class="invoice-box">
+      <table cellpadding="0" cellspacing="0">
+        <tr class="top">
+          <td colspan="4">
+            <table>
+              <tr>
+                <td class="title">
+                  <img src="../../../assets/img/LogoB.png" style="width:100%; max-width:300px;">
+                </td>
+  
+                <td>
+                  Factura #: 123<br>
+                  Creada: {{venta.dFecha}}<br>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+  
+        <tr class="information">
+          <td colspan="4">
+            <table>
+              <tr>
+                <td>
+                  Moreno Laparoscopio<br>
+                  4123 Buenos Aires<br>
+                  , Sin CP 80238
+                </td>
+  
+                <td *ngIf="Cliente">
+                  {{Cliente.cNombre}}<br>
+                  {{Cliente.cNomEncargado}}<br>
+                  {{Cliente.cCorreo}}<br>
+                  {{Cliente.cDireccion}}
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+  
+        <tr class="heading">
+          <td>
+            Producto
+          </td>
+          <td>
+            Cantidad
+          </td>
+          <td>
+            Precio
+          </td>
+          <td>
+            Importe
+          </td>
+        </tr>
+  
+        <tr class="item" *ngFor="let pro of lstDetalles">
+          <td>
+            {{descPro(pro.nIdProducto)}}
+          </td>
+          <td>
+            {{pro.nCantidad}}
+          </td>
+          <td>
+            {{pro.nPrecio | currency}}
+          </td>
+          <td>
+            {{pro.nPrecio * pro.nCantidad | currency}}
+          </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td>
+            IVA: {{venta.nIva | currency}}
+          </td>
+        </tr>
+        <tr class="total">
+          <td></td>
+          <td></td>
+          <td></td>
+          <td>
+            Total: {{venta.nTotal | currency}}
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+   -->
