@@ -25,7 +25,8 @@ export class ProcessComponent implements OnInit {
     dFecha: this.dp.transform(new Date(), "yyyy/MM/dd"),
     nSubTotal: 0,
     nIva: 0,
-    nTotal: 0
+    nTotal: 0,
+    bPagado:false
   };
   nIdSucursal: number = 0;
   lstDetalles = [];
@@ -189,7 +190,6 @@ export class ProcessComponent implements OnInit {
         .insert({ venta: this.venta, lstDetalles: this.lstDetalles }, "sales")
         .subscribe(data => {
           if (!data.bError) {
-            this.generatePDF();
             for (let det of this.lstDetalles) {
               this.service
                 .insert(
@@ -269,14 +269,16 @@ export class ProcessComponent implements OnInit {
       dFecha: this.dp.transform(new Date(), "yyyy/MM/dd"),
       nSubTotal: 0,
       nIva: 0,
-      nTotal: 0
+      nTotal: 0,
+      bPagado:false
     };
     this.lstDetalles = [];
     this.addDetail();
     this.addDetail();
   }
 
-  generatePDF() {
+  generatePDF(ev) {
+    ev.preventDefault();
     var data = document.getElementById("contentToConvert");
     console.log(document.getElementById("contentToConvert"));
     html2canvas(data).then(canvas => {

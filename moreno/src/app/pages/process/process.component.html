@@ -40,6 +40,10 @@
           {{venta.nTotal | currency}}
         </div>
       </div>
+      <div class="custom-control custom-checkbox">
+          <input type="checkbox" class="custom-control-input" id="defaultUnchecked" [(ngModel)]="venta.bPagado">
+          <label class="custom-control-label" for="defaultUnchecked">Pagado</label>
+      </div>
     </div>
     <button class="btn btn-success btn-lg" (click)="save()">Guardar Renta</button>
   </div>
@@ -49,11 +53,12 @@
     <div class="table-title">
       <div class="row">
         <div class="col-5">
-          <h2><b>Productos</b></h2>
+          <h2><b>Equipos</b></h2>
         </div>
         <div class="col-7">
+            <a href="#" class="btn btn-secondary" (click)="generatePDF($event)"><i class="fa fa-receipt"></i> <span>Generar Factura</span></a>
           <a href="#" class="btn btn-primary" (click)="addDetail($event)"><i class="fa fa-plus-circle"></i> <span>Agregar
-              Producto</span></a>
+              Equipo</span></a>
         </div>
       </div>
     </div>
@@ -73,7 +78,7 @@
           <td style="width:3%;">{{p.nIdProducto}}</td>
           <td style="width:40%;">
             <ng-select [items]="lstProductos" bindLabel="cDescripcion" bindValue="nIdProducto"
-              placeholder="Selecciona un producto" (change)="changeDetail($event,p.index)" [(ngModel)]="p.nIdProducto">
+              placeholder="Selecciona un equipo" (change)="changeDetail($event,p.index)" [(ngModel)]="p.nIdProducto">
             </ng-select>
             <small class="form-text d-none" [id]="'producto'+p.index">Campo Invalido</small>
           </td>
@@ -107,7 +112,7 @@
     </div>
     <div class="modal-body">
       <p><strong>No es posible guardar esta <span class="text-primary">Renta</span></strong></p>
-      <p>Porque no se tienen productos asignados a ella.
+      <p>Porque no se tienen equipos asignados a ella.
         <br>
         <span class="text-danger">Es necesario completar la renta correctamente.</span>
       </p>
@@ -132,15 +137,16 @@
     </div>
   </ng-template>
   
-  <!-- <div id="contentToConvert">
+  <div id="contentToConvert">
     <div class="invoice-box">
+      <h2>Reporte de renta</h2>
       <table cellpadding="0" cellspacing="0">
         <tr class="top">
           <td colspan="4">
             <table>
               <tr>
                 <td class="title">
-                  <img src="../../../assets/img/LogoB.png" style="width:100%; max-width:300px;">
+                  <!-- <img src="../../../assets/img/LogoB.png" style="width:100%; max-width:300px;"> -->
                 </td>
   
                 <td>
@@ -164,8 +170,7 @@
   
                 <td *ngIf="Cliente">
                   {{Cliente.cNombre}}<br>
-                  {{Cliente.cNomEncargado}}<br>
-                  {{Cliente.cCorreo}}<br>
+                  {{Cliente.cNumTel}}<br>
                   {{Cliente.cDireccion}}
                 </td>
               </tr>
@@ -175,7 +180,7 @@
   
         <tr class="heading">
           <td>
-            Producto
+            Equipo
           </td>
           <td>
             Cantidad
@@ -207,7 +212,7 @@
           <td></td>
           <td></td>
           <td>
-            IVA: {{venta.nIva | currency}}
+            <!-- IVA: {{venta.nIva | currency}} -->
           </td>
         </tr>
         <tr class="total">
@@ -221,4 +226,4 @@
       </table>
     </div>
   </div>
-   -->
+  
